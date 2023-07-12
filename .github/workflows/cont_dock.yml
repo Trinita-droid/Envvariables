@@ -1,0 +1,15 @@
+name: docker_container
+on: push
+jobs: 
+  test:
+    runs-on: windows-latest
+    steps:
+      - name: Get the code
+        uses: actions/checkout@v3
+      - name: Install NodeJS
+        uses: actions/setup-node@v3
+      - name: Install dependencies
+        run : npm ci
+        echo "test run"
+        
+  
