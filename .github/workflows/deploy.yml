@@ -14,15 +14,20 @@ jobs:
     env:
       # adding env variables
       MONGODB_CLUSTER_ADDRESS: cluster0.fv7y7b0.mongodb.net
-      # for test job, using  a db for testing 
-      MONGODB_USERNAME: trinitaxavier
+      # for test job, using  a db for testing , secrets context bj
+      # MONGODB_USERNAME: Trinita
+      MONGODB_USERNAME: ${{ secrets.MONGODB_USERNAME }}
       MONGODB_PASSWORD: vigoe1nUjrzUrduG
       PORT: 8080
     # environment: testing
     runs-on: windows-latest
     steps:
+
       - name: Get Code
         uses: actions/checkout@v3
+      - name: output secrets
+        run : |
+          echo "MONGODB_USERNAME: ${{ secrets.MONGODB_USERNAME }}" 
       - name: Cache dependencies
         uses: actions/cache@v3
         with:
