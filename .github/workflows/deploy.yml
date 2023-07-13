@@ -1,8 +1,8 @@
-name: Deployment
+name: Deployment in
 on:
   push:
     branches:
-      - main
+      - master
       # - dev
 env:
   # name of database to access for workflow level, for all jobs
