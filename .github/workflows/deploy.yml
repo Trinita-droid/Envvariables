@@ -1,0 +1,48 @@
+name: Deployment
+on:
+  push:
+    branches:
+      - master
+      # - dev
+env:
+  # name of database to access for workflow level, for all jobs
+  MONGODB_DB_NAME: database
+  # to create a db for the below creds
+  
+jobs:
+  test:
+    env:
+      # adding env variables
+      MONGODB_CLUSTER_ADDRESS: cluster0.fv7y7b0.mongodb.net
+      # for test job, using  a db for testing 
+      MONGODB_USERNAME: trinitaxavier
+      MONGODB_PASSWORD: vigoe1nUjrzUrduG
+      PORT: 8080
+    # environment: testing
+    runs-on: windows-latest
+    steps:
+      - name: Get Code
+        uses: actions/checkout@v3
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: npm-deps-${{ hashFiles('**/package-lock.json') }}
+      - name: Install dependencies
+        run: npm ci
+      - name: Run server
+      # below makes sure to start server
+        run: npm start & npx wait-on http://127.0.0.1:$env:PORT
+      - name: Run tests
+        run: npm test
+      - name: Output information
+        run: |
+        echo "MONGODB_USERNAME : ${{ env.MONGODB_USERNAME}} "
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Output information
+        run: |        
+          echo "MONGODB_PASSWORD: ${{ env.MONGODB_PASSWORD}}"
+          echo "MONGODB_NAME: $MONGODB_DB_NAME"
